@@ -1,4 +1,5 @@
 #define STB_IMAGE_IMPLEMENTATION
+
 #include <stdio.h>
 #include <string.h>
 
@@ -10,6 +11,9 @@ int main(int argc, char *argv[])
 {
     char chars[] = "^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$";
     int chars_len = strlen(chars);
+
+    int desired_width = 80;
+    int desired_height;
 
     char *images[MAX_IMAGES];
     int img_idx = 0;
@@ -32,18 +36,19 @@ int main(int argc, char *argv[])
     {
         char *image = images[i];
         int width, height, channels;
-        unsigned char *data = stbi_load(image, &width, &height, &channels, 3);
 
-        if (data == NULL)
+        unsigned char *image_data = stbi_load(image, &width, &height, &channels, 3);
+
+        if (image_data == NULL)
         {
             printf("Failed to load image: %s", image);
-            stbi_image_free(data);
+            stbi_image_free(image_data);
             continue;
         }
 
         /* printf("Loaded image with a width of %dpx, a height of %dpx, and %d channels\n", width, height, channels); */
 
-        unsigned char *pixels = data;
+        unsigned char *pixels = image_data;
 
         for (int row_idx = 0; row_idx < height; row_idx++)
         {
@@ -61,7 +66,7 @@ int main(int argc, char *argv[])
             putchar('\n');
         }
 
-        stbi_image_free(data);
+        stbi_image_free(image_data);
     }
 
     return 0;
